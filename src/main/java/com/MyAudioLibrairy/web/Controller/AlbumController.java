@@ -14,18 +14,15 @@ public class AlbumController {
     @Autowired
     private AlbumRepository albumRepository;
     @RequestMapping(method = RequestMethod.GET, value ="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Album getEmploye (@PathVariable(value= "id") Long id){
+    public Album getAlbum (@PathVariable(value= "id") Long id){
 
-        Optional<Album> optionalEmploye = albumRepository.findById(id);
-        if(optionalEmploye.isEmpty()){
+        Optional<Album> optionalAlbum = albumRepository.findById(id);
+        if(optionalAlbum.isEmpty()){
             //404
-            throw new EntityNotFoundException("l'employe d'identifiant" +id+  "n'a pas été trouvé");
+            throw new EntityNotFoundException("l'album d'identifiant" +id+  "n'a pas été trouvé");
         }
-        return optionalEmploye.get();
+        return optionalAlbum.get();
     }
 
-    @GetMapping(value = "/index")
-    public String getConnectionPage() {
-        return "index";
-    }
+
 }

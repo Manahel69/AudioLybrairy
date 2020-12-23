@@ -9,16 +9,16 @@ public class Artist {
 
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long ArtistId;
     private String name;
-    public Long albumId;
+
 
     public Long getId() {
-        return id;
+        return ArtistId;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.ArtistId = id;
     }
 
     public String getName() {
@@ -29,13 +29,6 @@ public class Artist {
         this.name = name;
     }
 
-    public Long getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(Long albumId) {
-        this.albumId = albumId;
-    }
 
 
 }
