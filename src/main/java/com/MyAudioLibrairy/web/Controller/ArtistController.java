@@ -27,6 +27,16 @@ public class ArtistController {
                 return optionalArtist.get();
         }
 
+        @RequestMapping(method =  RequestMethod.GET,value="",produces = MediaType.APPLICATION_JSON_VALUE)
+        public Artist searchByMatricule(@RequestParam String name) {
+                Artist artist = artistRepository.findByName(name);
+                if (artist == null) {
+                        throw new EntityNotFoundException("l'employe de matricule " + name + " n'a pas été trouvé");
+                }
+                return artist;
+        }
+
+
 
 
 }
