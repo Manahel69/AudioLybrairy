@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 @RestController
@@ -57,6 +58,18 @@ public class ArtistController {
                         throw new IllegalArgumentException("Le paramètre sortDirection doit valoir ASC ou DESC");
                 }
                 return artistRepository.findAll(PageRequest.of(page,size, Sort.Direction.fromString(sortDirection),sortProperty));
+        }
+
+        @RequestMapping(method = RequestMethod.POST, value = "",consumes = MediaType.APPLICATION_JSON_VALUE,
+                produces = MediaType.APPLICATION_JSON_VALUE)
+
+        public Artist createEmploye(@RequestBody Artist artist){
+                if (artistRepository.findByName(artist.getName()) !=null){
+                        throw new EntityExistsException("Il y a déjà un artist de nom " + artist.getName());
+                }
+
+                return artistRepository.save(artist);
+
         }
 
 
