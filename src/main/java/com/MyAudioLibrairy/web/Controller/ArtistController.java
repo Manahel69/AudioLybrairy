@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -63,12 +64,33 @@ public class ArtistController {
         @RequestMapping(method = RequestMethod.POST, value = "",consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
 
-        public Artist createEmploye(@RequestBody Artist artist){
+        public Artist createArtist(@RequestBody Artist artist){
                 if (artistRepository.findByName(artist.getName()) !=null){
                         throw new EntityExistsException("Il y a déjà un artist de nom " + artist.getName());
                 }
 
                 return artistRepository.save(artist);
+
+        }
+        //marche pas
+        @PutMapping(value = "/{id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+        public Artist updateArtist(@RequestBody Long id,@RequestBody Artist artist){
+                if(!artistRepository.existsById(id)){
+                        throw new EntityNotFoundException("L'artist d'identifiant " + id + " n'a pas été trouvé");
+
+                }
+                return artistRepository.save(artist);
+
+        }
+
+        @RequestMapping(method = RequestMethod.DELETE,value = "/{id}")
+        @ResponseStatus(HttpStatus.NO_CONTENT)//204
+        public void deleteArtist(@PathVariable Long id){
+                if(!artistRepository.existsById(id)){
+                        throw new EntityNotFoundException("L'artist d'identifiant " + id + " n'a pas été trouvé");
+
+                }
+                artistRepository.deleteById(id);
 
         }
 
