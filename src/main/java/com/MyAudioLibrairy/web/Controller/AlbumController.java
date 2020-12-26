@@ -27,6 +27,7 @@ public class AlbumController {
         System.out.println(test);
     }
     */
+    //marche pas
     @RequestMapping(method = RequestMethod.POST, value = "", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Album createAlbum(@RequestBody CreateAlbum create) {
@@ -39,7 +40,7 @@ public class AlbumController {
                 create.artist.id));
 
     }
-
+    //marche pas
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)//204
     public void deleteAlbum(@PathVariable Long id) {

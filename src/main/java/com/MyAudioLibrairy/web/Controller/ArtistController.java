@@ -75,7 +75,7 @@ public class ArtistController {
                 return artistRepository.save(artist);
 
         }
-        
+
         @PutMapping(value = "/{id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
         public Artist updateArtist(@PathVariable("id") Long id, @RequestBody Artist artist){
                 if(!artistRepository.existsById(id)){
