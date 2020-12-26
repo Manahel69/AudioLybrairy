@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import javax.websocket.server.PathParam;
 import java.util.Optional;
 @RestController
 @RequestMapping("/artists")
 public class ArtistController {
         @Autowired
         private ArtistRepository artistRepository;
+        @Autowired
+        private AlbumRepository albumRepository;
         @RequestMapping(method = RequestMethod.GET, value ="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
         public Artist getArtist (@PathVariable(value= "id") Long id){
 
@@ -32,14 +35,14 @@ public class ArtistController {
                 return optionalArtist.get();
         }
 
-      /*  @RequestMapping(method =  RequestMethod.GET,value="",produces = MediaType.APPLICATION_JSON_VALUE)
+        @RequestMapping(method =  RequestMethod.GET,value="/name",produces = MediaType.APPLICATION_JSON_VALUE)
         public Artist searchByName(@RequestParam String name) {
                 Artist artist = artistRepository.findByName(name);
                 if (artist == null) {
                         throw new EntityNotFoundException("l'artiste de nom" + name + " n'a pas été trouvé");
                 }
                 return artist;
-        }*/
+        }
 
         @RequestMapping(method =RequestMethod.GET, value = "",produces = MediaType.APPLICATION_JSON_VALUE)
         public Page<Artist> listArtists(
@@ -72,12 +75,14 @@ public class ArtistController {
                 return artistRepository.save(artist);
 
         }
-        //marche pas
+        
         @PutMapping(value = "/{id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-        public Artist updateArtist(@RequestBody Long id,@RequestBody Artist artist){
+        public Artist updateArtist(@PathVariable("id") Long id, @RequestBody Artist artist){
                 if(!artistRepository.existsById(id)){
                         throw new EntityNotFoundException("L'artist d'identifiant " + id + " n'a pas été trouvé");
-
+                }
+                if(!id.equals(artist.getId())) {
+                        throw new IllegalArgumentException("Requête invalide");
                 }
                 return artistRepository.save(artist);
 
@@ -85,10 +90,12 @@ public class ArtistController {
 
         @RequestMapping(method = RequestMethod.DELETE,value = "/{id}")
         @ResponseStatus(HttpStatus.NO_CONTENT)//204
-        public void deleteArtist(@PathVariable Long id){
-                if(!artistRepository.existsById(id)){
-                        throw new EntityNotFoundException("L'artist d'identifiant " + id + " n'a pas été trouvé");
 
+        public void deleteArtist(@PathVariable Long id){
+                Artist artist = artistRepository.findById(id)
+                        .orElseThrow(()->new EntityNotFoundException("l'artiste n'existe pas"));
+                if(!albumRepository.findAllByArtistId(id).isEmpty()){
+                        throw new EntityNotFoundException("Pour supprimer un manager, il faut que son équipe soit vide.");
                 }
                 artistRepository.deleteById(id);
 

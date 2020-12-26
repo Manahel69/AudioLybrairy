@@ -35,4 +35,21 @@ public class Album {
     public void setArtistId(Long artistId) {
         this.artistId = artistId;
     }
+
+    @Override
+    public String toString() {
+        return "Album{" +
+                "AlbumId=" + AlbumId +
+                ", title='" + title + '\'' +
+                ", artistId=" + artistId +
+                '}';
+    }
+
+    public Album() {
+    }
+
+    public Album(String title, Long artistId) {
+        this.title = title;
+        this.artistId = artistId;
+    }
 }
